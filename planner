@@ -1,0 +1,7 @@
+1. get most recent closing price from ticker
+2. use last clsoing price as starting price constant
+3. find average volatility
+4. simulate 252 trading days 1000 times and store in a csv file
+    - column are the simulations
+    - indexes are the trading days
+5. graph all of them using atplotlib
