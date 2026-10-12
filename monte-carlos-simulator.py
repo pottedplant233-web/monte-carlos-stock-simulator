@@ -18,22 +18,23 @@ class Stock: #does calculations nshit with numpy
             simulated_returns = np.random.normal(self.mean_return, self.volatility, 252)
             simulations[f'simulation{i}'] = simulated_returns
         df = pd.DataFrame(simulations)
-        df.to_csv(f'{self.ticker}simulatedreturns.csv')
+        df.to_csv(f'{self.ticker}simulatedreturns.csv', index=False)
     def convert(self):
         return_data = pd.read_csv(f'{self.ticker}simulatedreturns.csv')
         converted_returns = {}
         for i in range(return_data.shape[1]):
-            converted_array = []
+            converted_array = [self.closing]
             array = np.array(return_data[f'simulation{i}'])
             for index, value in enumerate(array):
-                if index == 0:
-                    converted_array.append(self.closing)
-                else:
-                    converted_array.append(converted_array[index-1] * (1 + array[index]))
+                    converted_array.append(converted_array[-1] * (1 + array[index]))
             converted_returns[i] = converted_array
 
         df_two = pd.DataFrame(converted_returns)
-        df_two.to_csv(f'{self.ticker}converted.csv')
+        df_two.to_csv(f'{self.ticker}converted.csv', index=False)
+    def get_time_steps(self):
+        df_three = pd.read_csv(f'{self.ticker}converted.csv')
+        return len(df_three)
+
 
 def main():
     tick_request = input('ticker:').upper().strip()
@@ -47,6 +48,17 @@ def main():
     monte = Stock(closing_price, volatility, mean_return, tick_request)
     monte.simulate()
     monte.convert()
+    time_steps = monte.get_time_steps()
+
+
+    trading_days = np.arange(0, time_steps)
+    plot(trading_days, )
+
+def plot(x, y):
+
+
+
+
 
 
 
