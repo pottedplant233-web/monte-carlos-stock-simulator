@@ -52,9 +52,24 @@ def main():
 
 
     trading_days = np.arange(0, time_steps)
-    plot(trading_days, )
+    plot(trading_days, tick_request, time_steps)
 
-def plot(x, y):
+def plot(trading_days, tick_request, time_steps):
+    converted_df = pd.read_csv(f'{tick_request}converted.csv')
+    for column in converted_df:
+        plt.plot(trading_days, converted_df[column])
+
+    plt.title(f'monte carlo simulation of 1000 {tick_request} outcomes')
+    plt.xticks(labels=trading_days[0:time_steps:10],
+               ticks=np.arange(0, time_steps, 10),
+               rotation= 45,
+               fontsize=8
+               )
+    plt.xlabel('Trading Days')
+    plt.ylabel('USD')
+    plt.grid()
+    plt.show()
+
 
 
 
