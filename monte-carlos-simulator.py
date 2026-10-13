@@ -42,9 +42,11 @@ def main():
     getter.get_ticker()
     stock_data = getter.get_data()
     closing_price = stock_data.iloc[-1]['Close']
+
     volatility = getter.volatility() / 100
     daily_return = getter.daily_return() / 100
     mean_return = np.mean(daily_return)
+
     monte = Stock(closing_price, volatility, mean_return, tick_request)
     monte.simulate()
     monte.convert()
@@ -52,9 +54,10 @@ def main():
 
 
     trading_days = np.arange(0, time_steps)
-    plot(trading_days, tick_request, time_steps)
+    plot_carlo(trading_days, tick_request, time_steps)
+    plot_hist(trading_days, tick_request, time_steps)
 
-def plot(trading_days, tick_request, time_steps):
+def plot_carlo(trading_days, tick_request, time_steps):
     converted_df = pd.read_csv(f'{tick_request}converted.csv')
     for column in converted_df:
         plt.plot(trading_days, converted_df[column])
@@ -70,12 +73,15 @@ def plot(trading_days, tick_request, time_steps):
     plt.grid()
     plt.show()
 
+def plot_hist(trading_days, tick_request, time_steps):
+    last_data = pd.read_csv(f'{tick_request}converted.csv')
+    final_prices = last_data.iloc[-1]
+    plt.hist(final_prices, bins=32)
 
-
-
-
-
-
+    plt.xlabel('Final Simulated Price USD')
+    plt.ylabel('Frequency')
+    plt.title('histogram of final price')
+    plt.show()
 
 
 

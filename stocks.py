@@ -19,6 +19,7 @@ class GetData:
         try:
             stock = yf.Ticker(self.ticker)
             data = stock.history(period='1y')
+            data = data.dropna(subset=['Close'])
 
 
             if data.empty:
